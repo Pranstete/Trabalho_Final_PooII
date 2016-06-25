@@ -1,0 +1,124 @@
+
+<ui:composition template="templateMenu.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui2="http://java.sun.com/jsf/facelets"
+	xmlns:tm="http://java.sun.com/jsf/composite/terminal/1_0/components">
+
+	<ui:define name="title">
+		<h:outputText value="#{msg['pages.cadastroPergunta.title']}" />
+	</ui:define>
+
+
+	<ui:define name="principal">
+
+		<h1>
+			<p:outputLabel value="#{msg['pages.cadastroPergunta.menu']}" />
+		</h1>
+
+
+		<h:form id="formPergunta">
+
+			<p:panelGrid columns="2">
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.tipo']}"
+					for="tipoPergunta" />
+				<p:selectOneMenu id="tipoPergunta"
+					valueChangeListener="#{perguntaManagedBean.tipoAlterado}"
+					value="#{perguntaManagedBean.pergunta.tipo}" required="true"
+					immediate="true">
+					<p:ajax update="alternativas"></p:ajax>
+					<f:selectItem noSelectionOption="true"></f:selectItem>
+					<f:selectItems value="#{perguntaManagedBean.tiposPergunta}"
+						var="tipo" itemLabel="${tipo.descricao}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.disciplina']}"
+					for="disciplina" />
+				<p:selectOneMenu id="disciplina"
+					value="#{perguntaManagedBean.disciplina}"
+					valueChangeListener="#{perguntaManagedBean.disciplinaAlterada}"
+					immediate="true" required="false" converter="disciplinaConverter">
+					<p:ajax listener="#{perguntaManagedBean.alterarConteudos}"
+						update="conteudo">
+					</p:ajax>
+					<f:selectItem noSelectionOption="true"></f:selectItem>
+					<f:selectItems value="#{perguntaManagedBean.disciplinas}"
+						var="disciplina" itemLabel="#{disciplina.nome}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.conteudo']}"
+					for="conteudo" />
+				<p:selectOneMenu id="conteudo"
+					value="#{perguntaManagedBean.pergunta.conteudo}"
+					valueChangeListener="#{perguntaManagedBean.conteudoAlterado}"
+					immediate="true" required="true" converter="conteudoConverter">
+					<f:selectItem noSelectionOption="true"></f:selectItem>
+					<f:selectItems value="#{perguntaManagedBean.conteudos}"
+						var="conteudo" itemLabel="${conteudo.descricao}"
+						itemDisabled="#{conteudo.disciplina != perguntaManagedBean.disciplina}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.perg']}"
+					for="texto" />
+				<p:inputTextarea id="texto" cols="40" rows="5"
+					value="#{perguntaManagedBean.pergunta.texto}" width="200"
+					required="true"></p:inputTextarea>
+			</p:panelGrid>
+
+			<p:spacer height="10"></p:spacer>
+
+			<p:fieldset id="alternativas"
+				legend="#{msg['pages.cadastroPergunta.alternativas']}">
+				<p:panelGrid columns="2">
+					<p:outputLabel
+						value="#{msg['pages.cadastroPergunta.alternativas.text']}"
+						for="alternativaTexto"></p:outputLabel>
+					<p:inputText id="alternativaTexto"
+						value="#{perguntaManagedBean.enunciado}"
+						disabled="#{not perguntaManagedBean.perguntaComAlternativas}"
+						maxlength="100" size="80" immediate="true">
+						<p:ajax event="blur" update="btnAddAlternativa"
+							listener="#{perguntaManagedBean.alternativaSaida}"></p:ajax>
+					</p:inputText>
+					<p:commandButton id="btnAddAlternativa"
+						value="#{msg['pages.commus.form.add']}" update="tblAlternativas"
+						immediate="true">
+						<p:ajax event="click" process="alternativaTexto"
+							update="tblAlternativas" 
+							listener="#{perguntaManagedBean.addAlternativa}"></p:ajax>
+					</p:commandButton>
+					<!-- (not perguntaManagedBean.perguntaComAlternativas) or (empty perguntaManagedBean.alternativa.enunciado) -->
+				</p:panelGrid>
+				<p:dataTable id="tblAlternativas"
+					value="#{perguntaManagedBean.pergunta.alternativas}"
+					var="alternativa">
+					<p:column
+						headerText="#{msg['pages.cadastroPergunta.alternativas.text']}">
+						<h:outputText value="#{alternativa.enunciado}" />
+					</p:column>
+					<p:column
+						headerText="#{msg['pages.cadastroPergunta.alternativas.ordem']}">
+						<h:outputText value="#{alternativa.ordem}" />
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+
+			<p:spacer height="10"></p:spacer>
+
+			<p:commandButton value="#{msg['pages.comuns.form.btnSalvar']}"
+				action="#{perguntaManagedBean.salvar}" update="@form" />
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+
+
+
+
+
+

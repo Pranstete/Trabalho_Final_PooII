@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form>
+		<p:panelMenu>
+		
+			<p:submenu label="#{msg['pages.comuns.menuLateral.gerencial']}">
+				<p:menuitem value="#{msg['pages.inicio.menu']}" url="inicio.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroPergunta.menu']}" url="cadastroPergunta.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroProva.menu']}" url="cadastroProva.xhtml" />
+			</p:submenu>
+	       
+		    <p:submenu label="#{msg['pages.comuns.menuLateral.inicio']}" >
+			  
+				<p:menuitem value="#{msg['pages.cadastroFaculdade.menu']}" url="cadastroFaculdade.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroProfessor.menu']}" url="cadastroProfessor.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroCurso.menu']}" url="cadastroCurso.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroDisciplina.menu']}" url="cadastroDisciplina.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroConteudo.menu']}" url="cadastroConteudo.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroPergunta.menu']}" url="cadastroPergunta.xhtml" />
+				<p:menuitem value="#{msg['pages.cadastroTurma.menu']}" url="cadastroTurma.xhtml" />
+
+			</p:submenu>
+					
+			<p:submenu label="#{msg['pages.comuns.menuLateral.options']}">
+				<p:menuitem value="#{msg['pages.linguagem.menu']}" url="linguagem.xhtml" />
+	       </p:submenu>
+		
+		</p:panelMenu>
+	</h:form>
+</ui:composition>
+

@@ -1,0 +1,92 @@
+
+<ui:composition template="templateMenu.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui2="http://java.sun.com/jsf/facelets"
+	xmlns:tm="http://java.sun.com/jsf/composite/terminal/1_0/components">
+	
+	<ui:define name="title">
+		<h:outputText value="#{msg['pages.cadastroEmpresa.title']}" />
+	</ui:define>
+	
+
+	<ui:define name="principal">
+	
+	
+    <h1><p:outputLabel value="#{msg['pages.cadastroEmpresa.menu']}"/></h1>
+    
+ 	<h:form id="formEmpresas">
+		<p:panelGrid columns="2">
+			<p:outputLabel value="#{msg['pages.cadastroEmpresa.nome']}" />
+			<p:inputText  value="#{empresaManagedBean.empresa.nome}"/>
+		</p:panelGrid>
+		<p:commandButton value="#{msg['pages.comuns.form.btnSalvar']}" update=":formEmpresas, :formTableEmpresas"  action="#{empresaManagedBean.salvar}"/>
+	</h:form>
+
+    
+    <h3><p:outputLabel value="#{msg['pages.cadastroEmpresa.tableTitle']}"/></h3>
+	<h:form id="formTableEmpresas">
+	
+	    <p:growl id="growl" showDetail="true" />
+	
+		<p:dataTable value="#{empresaManagedBean.empresas}" var="f"
+			editable="true" id="tableFuncionarios"
+			selectionMode="single" selection="#{empresaManagedBean.empresaSelecionado}"  rowKey="#{f.codigo}"
+			>
+
+		   <p:ajax event="rowSelect"   update=":formTableFuncionarios" />
+           <p:ajax event="rowUnselect" update=":formTableFuncionarios" />
+           <p:ajax event="rowEdit"     listener="#{empresaManagedBean.onRowEdit}"     update=":formTableFuncionarios" /> 
+
+			<p:column headerText="#{msg['pages.cadastroEmpresa.codigo']}">
+				<h:outputText value="#{f.codigo}" />
+			</p:column>
+
+			<p:column headerText="#{msg['pages.cadastroEmpresa.nome']}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<p:outputLabel value="#{f.nome}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="modelInput" value="#{f.nome}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column style="width:70px" headerText="#{msg['pages.commus.form.opcoes']}">
+					<p:rowEditor />
+					<p:commandLink id="remover" styleClass="ui-icon ui-icon-trash"
+						style="text-align:center"
+						actionListener="#{empresaManagedBean.remove(f)}"
+						update=":formTableEmpresas" />
+			</p:column>
+
+		</p:dataTable>
+	</h:form>
+
+    <br/>
+    <h:form id="formTableFuncionarios">
+	    <h3><p:outputLabel value="#{msg['pages.cadastroEmpresa.funcionariosEmpresa']}: #{empresaManagedBean.empresaSelecionado.nome}" /></h3>
+		<p:dataTable value="#{empresaManagedBean.funcionariosEmpresa}" var="prod"	id="tableFuncionarios">
+
+			<p:column headerText="#{msg['pages.cadastroEmpresa.funcionario.codigo']}">
+				<h:outputText value="#{prod.codigo}" />
+			</p:column>
+
+			<p:column headerText="#{msg['pages.cadastroEmpresa.funcionario.nome']}">
+						<p:outputLabel value="#{prod.nome}" />
+			</p:column>
+
+			<p:column headerText="#{msg['pages.cadastroEmpresa.funcionario.salario']}">
+				<h:outputText value="#{prod.salario}" />
+			</p:column>
+
+		</p:dataTable>
+	</h:form>
+
+	</ui:define>
+</ui:composition>

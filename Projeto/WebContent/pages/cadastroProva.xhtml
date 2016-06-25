@@ -1,0 +1,63 @@
+
+<ui:composition template="templateMenu.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui2="http://java.sun.com/jsf/facelets"
+	xmlns:tm="http://java.sun.com/jsf/composite/terminal/1_0/components">
+
+	<ui:define name="title">
+		<h:outputText value="#{msg['pages.cadastroProva.title']}" />
+	</ui:define>
+
+	<ui:define name="principal">
+
+		<h1>
+			<p:outputLabel value="#{msg['pages.cadastroProva.menu']}" />
+		</h1>
+
+		<h:form id="formProva">
+			<p:panelGrid columns="2">
+				<p:outputLabel value="#{msg['pages.cadastroProva.data']}" />
+				<p:calendar id="dataProva"
+					value="#{provaManagedBean.prova.dataProva}" pattern="dd/MM/yyyy"
+					showOn="button"></p:calendar>
+
+				<p:outputLabel value="#{msg['pages.cadastroProva.faculdade']}" />
+				<p:selectOneMenu value="provaManagedBean.prova.faculdade"
+					style="width:150px;">
+					<f:selectItem noSelectionOption="true"></f:selectItem>
+					<f:selectItems value="#{provaManagedBean.faculdades}"
+						var="faculdade" itemLabel="#{faculdade.nome}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{msg['pages.cadastroProva.turma']}" />
+				<p:selectOneMenu value="provaManagedBean.prova.turma"
+					style="width:150px;">
+					<f:selectItem noSelectionOption="true"></f:selectItem>
+					<f:selectItems value="#{provaManagedBean.turmas}" var="turma"
+						itemLabel="#{turma.nome}"></f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{msg['pages.cadastroProva.disciplina']}" />
+				<p:selectOneMenu value="provaManagedBean.prova.disciplina"
+					style="width:150px;">
+					<f:selectItem noSelectionOption="true"></f:selectItem>
+					<f:selectItems value="#{provaManagedBean.disciplinas}"
+						var="disciplina" itemLabel="#{disciplina.nome}"></f:selectItems>
+				</p:selectOneMenu>
+			</p:panelGrid>
+			
+			<p:spacer height="10"></p:spacer>
+			
+			<p:fieldset legend="#{msg['pages.cadastroProva.perguntas']}">
+				<p:panelGrid columns="2">
+				<p:outputLabel value="#{msg['pages.cadastroProva.disciplina']}" />
+				<p:outputLabel value="#{msg['pages.cadastroProva.pergunta.escolha']}" />
+				</p:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>
