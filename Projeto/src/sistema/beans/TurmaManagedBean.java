@@ -3,59 +3,78 @@ package sistema.beans;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.event.RowEditEvent;
 
+import sistema.modelos.Curso;
+import sistema.modelos.Disciplina;
+import sistema.modelos.Faculdade;
+import sistema.modelos.Professor;
 import sistema.modelos.Turma;
+import sistema.service.DisciplinaService;
+import sistema.service.FaculdadeService;
+import sistema.service.ProfessorService;
 import sistema.service.TurmaService;
 
-@ManagedBean
+@ManagedBean(name = "turmaManagedBean")
 @ViewScoped
-public class TurmaManagedBean {
+public class TurmaManagedBean extends sistema.beans.ManagedBean<Turma> {
 
-	private Turma turma = new Turma();
-	private List<Turma> turmas;
-	private TurmaService service = new TurmaService();
+	private ProfessorService professorService = new ProfessorService();
+	private FaculdadeService faculdadeService = new FaculdadeService();
+	private DisciplinaService disciplinaService = new DisciplinaService();
+	private Faculdade faculdade;
+	private Curso curso;
 
-	
-	//Edição de um turma na tabela
-	public void onRowEdit(RowEditEvent event) {
-
-		Turma a = ((Turma) event.getObject());
-		service.alterar(a);
-	}
-
-	
-	
-	public void salvar() {
-		service.salvar(turma);
-
-		if (turmas != null)
-			turmas.add(turma);
-
-		turma = new Turma();
-
+	public TurmaManagedBean() {
+		super(new TurmaService());
 	}
 
 	public Turma getTurma() {
-		return turma;
+		return model;
 	}
 
 	public void setTurma(Turma turma) {
-		this.turma = turma;
+		this.model = turma;
 	}
 
-	//Retorna a lista de turmas para a tabela
+	public Faculdade getFaculdade() {
+		return faculdade;
+	}
+
+	public void setFaculdade(Faculdade faculdade) {
+		this.faculdade = faculdade;
+	}
+
+	public Curso getCurso() {
+		return curso;
+	}
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
+	}
+
+	public List<Faculdade> getFaculdades() {
+		return faculdadeService.getList();
+	}
+
 	public List<Turma> getTurmas() {
-		if (turmas == null)
-			turmas = service.getTurmas();
-
-		return turmas;
+		return getList();
 	}
 
-	public void remover(Turma turma) {
-		service.remover(turma);
-		turmas.remove(turma);
-
+	public List<Professor> getProfessores() {
+		return professorService.getList();
+	}
+	
+	public List<Curso> getCursos() {
+		return faculdade == null ? null : faculdade.getCursos();
 	}
 
+	public List<Disciplina> getDisciplinas() {
+		return curso == null ? null : disciplinaService.getDisciplinasPorCurso(curso);
+	}
+
+	@Override
+	public void save() {
+		this.model.getDisciplina().setCurso(curso);
+		super.save();
+	}
 }

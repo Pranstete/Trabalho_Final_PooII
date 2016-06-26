@@ -18,7 +18,7 @@ public class Prova implements Serializable {
 	private static final long serialVersionUID = 8365850879090012706L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long codigo;
 
 	@Temporal(TemporalType.DATE)
@@ -36,8 +36,6 @@ public class Prova implements Serializable {
 	@JoinColumn(name = "cod_disciplina", nullable = false)
 	private Disciplina disciplina;
 	
-	
-
 	public long getCodigo() {
 		return codigo;
 	}
@@ -105,7 +103,4 @@ public class Prova implements Serializable {
 		return "Prova [codigo=" + codigo + ", dataProva=" + dataProva + ", faculdade=" + faculdade + ", turma=" + turma
 				+ ", disciplina=" + disciplina + "]";
 	}
-
-	
-	
 }

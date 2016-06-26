@@ -3,59 +3,26 @@ package sistema.beans;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.event.RowEditEvent;
-
 import sistema.modelos.Faculdade;
 import sistema.service.FaculdadeService;
 
-@ManagedBean
+@ManagedBean(name = "faculdadeManagedBean")
 @ViewScoped
-public class FaculdadeManagedBean {
+public class FaculdadeManagedBean extends sistema.beans.ManagedBean<Faculdade> {
 
-	private Faculdade faculdade = new Faculdade();
-	private List<Faculdade> faculdades;
-	private FaculdadeService service = new FaculdadeService();
-
-	
-	//Edição de um faculdade na tabela
-	public void onRowEdit(RowEditEvent event) {
-
-		Faculdade a = ((Faculdade) event.getObject());
-		service.alterar(a);
-	}
-
-	
-	
-	public void salvar() {
-		service.salvar(faculdade);
-
-		if (faculdades != null)
-			faculdades.add(faculdade);
-
-		faculdade = new Faculdade();
-
+	public FaculdadeManagedBean() {
+		super(new FaculdadeService());
 	}
 
 	public Faculdade getFaculdade() {
-		return faculdade;
+		return model;
 	}
 
 	public void setFaculdade(Faculdade faculdade) {
-		this.faculdade = faculdade;
+		this.model = faculdade;
 	}
-
-	//Retorna a lista de faculdades para a tabela
+	
 	public List<Faculdade> getFaculdades() {
-		if (faculdades == null)
-			faculdades = service.getFaculdades();
-
-		return faculdades;
+		return getList();
 	}
-
-	public void remover(Faculdade faculdade) {
-		service.remover(faculdade);
-		faculdades.remove(faculdade);
-
-	}
-
 }

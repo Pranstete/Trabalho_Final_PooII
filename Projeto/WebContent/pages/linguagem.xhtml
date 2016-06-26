@@ -18,7 +18,7 @@
 	   	 <h:form >
             <p:outputLabel value="#{msg['pages.linguagem.lingua']} "/>
             
-            <p:selectOneMenu value="#{localeBean.language}" onchange="submit()" >
+            <p:selectOneMenu value="#{localeManagedBean.language}" onchange="submit()" >
                 <f:selectItem itemValue="en" itemLabel="English" />
                 <f:selectItem itemValue="pt" itemLabel="Português" />
             </p:selectOneMenu>

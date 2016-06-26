@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum TipoPergunta implements Serializable {
 
-	DISSERTATIVA("Dissertaviva"),
+	DISSERTATIVA("Dissertativa"),
 	BOOLEANA("Verdadeiro/Falso"),
 	ALTERNATIVA("Alternativa");
 	

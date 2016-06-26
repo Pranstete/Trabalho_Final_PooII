@@ -13,21 +13,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Pergunta implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4247759259576529210L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long codigo;
 
-	@Column(length = 200, nullable = false)
+	@Column(nullable = false)
 	private String texto;
 
 	@Enumerated(EnumType.STRING)
@@ -37,8 +36,12 @@ public class Pergunta implements Serializable {
 	@JoinColumn(name = "cod_conteudo", nullable = false)
 	private Conteudo conteudo;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pergunta")
-	private List<Alternativa> alternativas = new ArrayList<Alternativa>();
+	@OneToMany
+	@JoinColumn(name="subPergunta")
+	private List<Pergunta> subPerguntas;
+
+	// @OneToMany(cascade = CascadeType.ALL, mappedBy = "pergunta")
+	// private List<Alternativa> alternativas = new ArrayList<Alternativa>();
 
 	public long getCodigo() {
 		return codigo;
@@ -72,13 +75,13 @@ public class Pergunta implements Serializable {
 		this.conteudo = conteudo;
 	}
 
-	public List<Alternativa> getAlternativas() {
-		return alternativas;
-	}
-
-	public void setAlternativas(List<Alternativa> alternativas) {
-		this.alternativas = alternativas;
-	}
+	// public List<Alternativa> getAlternativas() {
+	// return alternativas;
+	// }
+	//
+	// public void setAlternativas(List<Alternativa> alternativas) {
+	// this.alternativas = alternativas;
+	// }
 
 	@Override
 	public int hashCode() {
@@ -107,4 +110,11 @@ public class Pergunta implements Serializable {
 		return "Pergunta [codigo=" + codigo + ", texto=" + texto + ", tipo=" + tipo + ", conteudo=" + conteudo + "]";
 	}
 
+	public List<Pergunta> getSubPerguntas() {
+		return subPerguntas;
+	}
+
+	public void setSubPerguntas(List<Pergunta> subPerguntas) {
+		this.subPerguntas = subPerguntas;
+	}
 }

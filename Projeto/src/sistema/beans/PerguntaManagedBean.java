@@ -1,14 +1,11 @@
 package sistema.beans;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 
-import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.TreeNode;
 
 import sistema.modelos.Alternativa;
 import sistema.modelos.Conteudo;
@@ -21,43 +18,83 @@ import sistema.service.PerguntaService;
 
 @ManagedBean(name = "perguntaManagedBean")
 @ViewScoped
-public class PerguntaManagedBean implements Serializable {
+public class PerguntaManagedBean extends sistema.beans.ManagedBean<Pergunta> {
 
-	private static final long serialVersionUID = -6648290512515982057L;
-
-	private Pergunta pergunta = new Pergunta();
-	private Conteudo conteudo;
-	private Disciplina disciplina;
-	private List<Conteudo> conteudos;
-
-	private ConteudoService contService = new ConteudoService();
-	private PerguntaService perguntaService = new PerguntaService();
 	private DisciplinaService disciplinaService = new DisciplinaService();
+	private TipoPergunta tipoPergunta;
+	private Disciplina disciplina;
+//	private Alternativa alternativa = new Alternativa();
+	private TreeNode t; 
+	public PerguntaManagedBean() {
+		super(new PerguntaService());
+	}
 
-	private Alternativa alternativa;
+	public Pergunta getPergunta() {
+		return model;
+	}
+
+	public void setPergunta(Pergunta pergunta) {
+		this.model = pergunta;
+	}
 	
-	private String enunciado;
-
-	public void salvar() {
-		// pergunta.setConteudo(conteudo);
-		System.out.println(pergunta);
-
-		perguntaService.salvar(pergunta);
-
-		pergunta = new Pergunta();
+	public Disciplina getDisciplina() {
+		return disciplina;
+	}
+	
+	public void setDisciplina(Disciplina disciplina) {
+		this.disciplina = disciplina;
+	}
+//	public Alternativa getAlternativa() {
+//		return alternativa;
+//	}
+//	
+//	public void setAlternativa(Alternativa alternativa) {
+//		this.alternativa = alternativa;
+//	}
+	
+	public List<Pergunta> getPerguntas() {
+		return getList();
+	}
+	
+	public List<Conteudo> getConteudos() {
+		return disciplina == null ? null : disciplina.getConteudos();
+	}
+	
+	public List<Disciplina> getDisciplinas() {
+		return disciplinaService.getList();
 	}
 
-	public void remove(Conteudo conteudo) {
-		conteudos.remove(conteudo);
-		contService.remover(conteudo);
+	public TipoPergunta[] getTiposPergunta() {
+		return TipoPergunta.values();
 	}
-
-	public void onRowEdit(RowEditEvent event) {
-
-		Conteudo p = ((Conteudo) event.getObject());
-		contService.alterar(p);
+	
+	public TipoPergunta getTipoPergunta() {
+		return tipoPergunta;
 	}
-
+	
+	public void setTipoPergunta(TipoPergunta tipoPergunta) {
+		this.tipoPergunta = tipoPergunta;
+	}
+	
+	public Boolean isAlternativa() {
+		return tipoPergunta == TipoPergunta.ALTERNATIVA;
+	}
+	
+	public Boolean isDissertativa() {
+		return tipoPergunta == TipoPergunta.DISSERTATIVA;
+	}
+	
+	public Boolean isBooleana() {
+		return tipoPergunta == TipoPergunta.BOOLEANA;
+	}
+	
+	@Override
+	public void save() {
+		
+		super.save();
+	}
+/*
+	
 	public void tipoAlterado(ValueChangeEvent e) {
 		this.pergunta.setTipo((TipoPergunta) e.getNewValue());
 
@@ -79,7 +116,7 @@ public class PerguntaManagedBean implements Serializable {
 		if (this.disciplina == null) {
 			conteudos = null;
 		} else {
-			conteudos = contService.getConteudosPorDisciplina((int) this.disciplina.getCodigo());
+//			conteudos = contService.getConteudosPorDisciplina((int) this.disciplina.getCodigo());
 		}
 	}
 
@@ -104,52 +141,6 @@ public class PerguntaManagedBean implements Serializable {
 		}
 	}
 
-	public Conteudo getConteudo() {
-		return conteudo;
-	}
-
-	public void setConteudo(Conteudo conteudo) {
-		this.conteudo = conteudo;
-	}
-
-	public Pergunta getPergunta() {
-		return pergunta;
-	}
-
-	public void setPergunta(Pergunta pergunta) {
-		this.pergunta = pergunta;
-	}
-
-	public List<Conteudo> getConteudos() {
-		return this.contService.getConteudos();
-	}
-
-	public List<Disciplina> getDisciplinas() {
-		return disciplinaService.getDisciplinas();
-	}
-
-	public Disciplina getDisciplina() {
-		return disciplina;
-	}
-
-	public void setDisciplina(Disciplina disciplina) {
-		this.disciplina = disciplina;
-	}
-
-	public TipoPergunta[] getTiposPergunta() {
-		return TipoPergunta.values();
-	}
-
-	public Alternativa getAlternativa() {
-		return alternativa;
-	}
-
-	public void setAlternativa(Alternativa alternativa) {
-		this.alternativa = alternativa;
-	}
-	
-	
-
 	public String getEnunciado() {
 		return enunciado;
 	}
@@ -161,5 +152,5 @@ public class PerguntaManagedBean implements Serializable {
 	public boolean isPerguntaComAlternativas() {
 		return (this.pergunta.getTipo() == null) ? false : (this.pergunta.getTipo() == TipoPergunta.ALTERNATIVA);
 	}
-
+*/
 }

@@ -1,4 +1,3 @@
-
 <ui:composition template="templateMenu.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -12,113 +11,94 @@
 		<h:outputText value="#{msg['pages.cadastroPergunta.title']}" />
 	</ui:define>
 
-
 	<ui:define name="principal">
-
 		<h1>
 			<p:outputLabel value="#{msg['pages.cadastroPergunta.menu']}" />
 		</h1>
 
-
-		<h:form id="formPergunta">
-
+		<h:form>
 			<p:panelGrid columns="2">
-				<p:outputLabel value="#{msg['pages.cadastroPergunta.tipo']}"
-					for="tipoPergunta" />
-				<p:selectOneMenu id="tipoPergunta"
-					valueChangeListener="#{perguntaManagedBean.tipoAlterado}"
-					value="#{perguntaManagedBean.pergunta.tipo}" required="true"
-					immediate="true">
-					<p:ajax update="alternativas"></p:ajax>
-					<f:selectItem noSelectionOption="true"></f:selectItem>
-					<f:selectItems value="#{perguntaManagedBean.tiposPergunta}"
-						var="tipo" itemLabel="${tipo.descricao}"></f:selectItems>
-				</p:selectOneMenu>
-
-				<p:outputLabel value="#{msg['pages.cadastroPergunta.disciplina']}"
-					for="disciplina" />
-				<p:selectOneMenu id="disciplina"
-					value="#{perguntaManagedBean.disciplina}"
-					valueChangeListener="#{perguntaManagedBean.disciplinaAlterada}"
-					immediate="true" required="false" converter="disciplinaConverter">
-					<p:ajax listener="#{perguntaManagedBean.alterarConteudos}"
-						update="conteudo">
-					</p:ajax>
-					<f:selectItem noSelectionOption="true"></f:selectItem>
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.disciplina']}" />
+				<p:selectOneMenu value="#{perguntaManagedBean.disciplina}"
+					converter="disciplinaConverter">
+					<f:selectItem itemValue=""
+						itemLabel="#{msg['pages.cadastroPergunta.disciplina.msg']}" />
 					<f:selectItems value="#{perguntaManagedBean.disciplinas}"
-						var="disciplina" itemLabel="#{disciplina.nome}">
-					</f:selectItems>
+						var="disciplina" itemValue="#{disciplina}"
+						itemLabel="#{disciplina.nome}" />
 				</p:selectOneMenu>
 
-				<p:outputLabel value="#{msg['pages.cadastroPergunta.conteudo']}"
-					for="conteudo" />
-				<p:selectOneMenu id="conteudo"
-					value="#{perguntaManagedBean.pergunta.conteudo}"
-					valueChangeListener="#{perguntaManagedBean.conteudoAlterado}"
-					immediate="true" required="true" converter="conteudoConverter">
-					<f:selectItem noSelectionOption="true"></f:selectItem>
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.conteudo']}" />
+				<p:selectOneMenu value="#{perguntaManagedBean.pergunta.conteudo}"
+					converter="conteudoConverter">
+					<f:selectItem itemValue=""
+						itemLabel="#{msg['pages.cadastroPergunta.conteudo.msg']}" />
 					<f:selectItems value="#{perguntaManagedBean.conteudos}"
-						var="conteudo" itemLabel="${conteudo.descricao}"
-						itemDisabled="#{conteudo.disciplina != perguntaManagedBean.disciplina}"></f:selectItems>
+						var="conteudo" itemValue="#{conteudo}"
+						itemLabel="#{conteudo.descricao}" />
 				</p:selectOneMenu>
 
-				<p:outputLabel value="#{msg['pages.cadastroPergunta.perg']}"
-					for="texto" />
-				<p:inputTextarea id="texto" cols="40" rows="5"
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.perg']}" />
+				<p:inputTextarea cols="40" rows="5"
 					value="#{perguntaManagedBean.pergunta.texto}" width="200"
-					required="true"></p:inputTextarea>
+					required="true" />
+
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.tipo']}" />
+				<p:selectOneMenu value="#{perguntaManagedBean.tipoPergunta}"
+					required="true">
+					<f:selectItem itemValue=""
+						itemLabel="#{msg['pages.cadastroPergunta.tipoPergunta.msg']}" />
+					<f:selectItems value="#{perguntaManagedBean.tiposPergunta}"
+						var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+				</p:selectOneMenu>
 			</p:panelGrid>
-
-			<p:spacer height="10"></p:spacer>
-
-			<p:fieldset id="alternativas"
-				legend="#{msg['pages.cadastroPergunta.alternativas']}">
-				<p:panelGrid columns="2">
-					<p:outputLabel
-						value="#{msg['pages.cadastroPergunta.alternativas.text']}"
-						for="alternativaTexto"></p:outputLabel>
-					<p:inputText id="alternativaTexto"
-						value="#{perguntaManagedBean.enunciado}"
-						disabled="#{not perguntaManagedBean.perguntaComAlternativas}"
-						maxlength="100" size="80" immediate="true">
-						<p:ajax event="blur" update="btnAddAlternativa"
-							listener="#{perguntaManagedBean.alternativaSaida}"></p:ajax>
-					</p:inputText>
-					<p:commandButton id="btnAddAlternativa"
-						value="#{msg['pages.commus.form.add']}" update="tblAlternativas"
-						immediate="true">
-						<p:ajax event="click" process="alternativaTexto"
-							update="tblAlternativas" 
-							listener="#{perguntaManagedBean.addAlternativa}"></p:ajax>
-					</p:commandButton>
-					<!-- (not perguntaManagedBean.perguntaComAlternativas) or (empty perguntaManagedBean.alternativa.enunciado) -->
-				</p:panelGrid>
-				<p:dataTable id="tblAlternativas"
-					value="#{perguntaManagedBean.pergunta.alternativas}"
-					var="alternativa">
-					<p:column
-						headerText="#{msg['pages.cadastroPergunta.alternativas.text']}">
-						<h:outputText value="#{alternativa.enunciado}" />
-					</p:column>
-					<p:column
-						headerText="#{msg['pages.cadastroPergunta.alternativas.ordem']}">
-						<h:outputText value="#{alternativa.ordem}" />
-					</p:column>
-				</p:dataTable>
-			</p:fieldset>
-
-			<p:spacer height="10"></p:spacer>
-
 			<p:commandButton value="#{msg['pages.comuns.form.btnSalvar']}"
-				action="#{perguntaManagedBean.salvar}" update="@form" />
+				action="#{perguntaManagedBean.save}" update="@form, :formTable" />
+
+
 		</h:form>
 
+
+
+		<h3>
+			<p:outputLabel value="#{msg['pages.cadastroPergunta.tableTitle']}" />
+		</h3>
+		<h:form id="formTable">
+			<p:dataTable value="#{perguntaManagedBean.perguntas}" var="model"
+				editable="true" paginator="true" rows="5"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15"
+				emptyMessage="#{msg['pages.cadastroPergunta.filterMSG']}">
+
+				<p:ajax event="rowEdit" listener="#{perguntaManagedBean.onRowEdit}"
+					update="@this" />
+
+				<p:column headerText="#{msg['pages.cadastroPergunta.codigo']}"
+					filterBy="#{model.codigo}">
+					<p:outputLabel value="#{model.codigo}" />
+				</p:column>
+
+				<p:column headerText="#{msg['pages.cadastroPergunta.perg']}"
+					filterBy="#{model.texto}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<p:outputLabel value="#{model.texto}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{model.texto}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column style="width:70px"
+					headerText="#{msg['pages.cadastroPergunta.optionTable']}">
+					<p:rowEditor />
+					<p:commandLink styleClass="ui-icon ui-icon-trash"
+						style="text-align:center"
+						actionListener="#{perguntaManagedBean.delete(model)}"
+						update="@form" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
 	</ui:define>
-
 </ui:composition>
-
-
-
-
-
-

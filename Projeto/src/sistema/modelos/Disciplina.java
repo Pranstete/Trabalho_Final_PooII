@@ -4,62 +4,68 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Disciplina implements Serializable{
+public class Disciplina implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long codigo;
+	@Column(nullable = false)
 	private String nome;
-	
-	@OneToMany(mappedBy="disciplina")
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Curso curso;
+
+	@OneToMany(mappedBy = "disciplina")
 	private List<Conteudo> conteudos = new ArrayList<Conteudo>();
-	
-	
-	public Disciplina(long codigo, String nome) {
-		super();
-		this.codigo = codigo;
-		this.nome = nome;
-	}
-	
-	public Disciplina() {
-	}
-	
+
 	public long getCodigo() {
 		return codigo;
 	}
+
 	public void setCodigo(long codigo) {
 		this.codigo = codigo;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public Curso getCurso() {
+		return curso;
+	}
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
+	}
+
 	public List<Conteudo> getConteudos() {
 		return conteudos;
 	}
+
 	public void setConteudos(List<Conteudo> conteudos) {
 		this.conteudos = conteudos;
 	}
-	
-	public void addConteudo(Conteudo conteudo)
-	{
+
+	public void addConteudo(Conteudo conteudo) {
 		conteudos.add(conteudo);
-		
+
 	}
-	
 
 	@Override
 	public int hashCode() {
@@ -86,16 +92,9 @@ public class Disciplina implements Serializable{
 		return true;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "Disciplina [codigo=" + codigo + ", nome=" + nome + "]";
+		return "Disciplina [codigo=" + codigo + ", nome=" + nome + ", curso=" + curso + ", conteudos=" + conteudos
+				+ "]";
 	}
-
-	
-
-	
-	
-	
-	
 }

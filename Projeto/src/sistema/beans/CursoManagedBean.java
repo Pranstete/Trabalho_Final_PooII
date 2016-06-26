@@ -3,59 +3,34 @@ package sistema.beans;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.event.RowEditEvent;
-
 import sistema.modelos.Curso;
+import sistema.modelos.Faculdade;
 import sistema.service.CursoService;
+import sistema.service.FaculdadeService;
 
-@ManagedBean
+@ManagedBean(name = "cursoManagedBean")
 @ViewScoped
-public class CursoManagedBean {
+public class CursoManagedBean extends sistema.beans.ManagedBean<Curso> {
 
-	private Curso curso = new Curso();
-	private List<Curso> cursos;
-	private CursoService service = new CursoService();
-
+	private FaculdadeService faculdadeService = new FaculdadeService();
 	
-	//Edição de um curso na tabela
-	public void onRowEdit(RowEditEvent event) {
-
-		Curso a = ((Curso) event.getObject());
-		service.alterar(a);
-	}
-
-	
-	
-	public void salvar() {
-		service.salvar(curso);
-
-		if (cursos != null)
-			cursos.add(curso);
-
-		curso = new Curso();
-
+	public CursoManagedBean() {
+		super(new CursoService());
 	}
 
 	public Curso getCurso() {
-		return curso;
+		return model;
 	}
 
 	public void setCurso(Curso curso) {
-		this.curso = curso;
+		this.model = curso;
 	}
-
-	//Retorna a lista de cursos para a tabela
+	
 	public List<Curso> getCursos() {
-		if (cursos == null)
-			cursos = service.getCursos();
-
-		return cursos;
+		return getList();
 	}
-
-	public void remover(Curso curso) {
-		service.remover(curso);
-		cursos.remove(curso);
-
+	
+	public List<Faculdade> getFaculdades() {
+		return faculdadeService.getList();
 	}
-
 }
