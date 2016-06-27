@@ -7,12 +7,16 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import sistema.modelos.Curso;
+import sistema.modelos.Disciplina;
 import sistema.modelos.Faculdade;
 import sistema.modelos.Pergunta;
+import sistema.modelos.Professor;
 import sistema.modelos.Prova;
 import sistema.modelos.Turma;
+import sistema.service.DisciplinaService;
 import sistema.service.FaculdadeService;
 import sistema.service.PerguntaService;
+import sistema.service.ProfessorService;
 import sistema.service.ProvaService;
 import sistema.service.TurmaService;
 
@@ -23,7 +27,12 @@ public class ProvaManagedBean extends sistema.beans.ManagedBean<Prova> {
 	private TurmaService turmaService = new TurmaService();
 	private FaculdadeService faculdadeService = new FaculdadeService();
 	private PerguntaService perguntaService = new PerguntaService();
-//	private List<Pergunta> perguntasSalvar = new ArrayList<Pergunta>();
+	private DisciplinaService disciplinaService = new DisciplinaService();
+	private ProfessorService professorService = new ProfessorService();
+	private Faculdade faculdade;
+	private Curso curso;
+	private Professor professor;
+	private Pergunta pergunta = new Pergunta();
 	
 	public ProvaManagedBean() {
 		super(new ProvaService());
@@ -41,13 +50,71 @@ public class ProvaManagedBean extends sistema.beans.ManagedBean<Prova> {
 		return getList();
 	}
 	
-	public List<Turma> getTurmas() {
-		return turmaService.getList();
+	public Faculdade getFaculdade() {
+		return faculdade;
+	}
+	
+	public Professor getProfessor() {
+		return professor;
+	}
+	
+	public void setProfessor(Professor professor) {
+		this.professor = professor;
+		if (professor == null || faculdade == null)
+			setFaculdade(null);
+		else
+			setFaculdade(faculdadeService.getFaculdadesPorProfessor(professor).isEmpty() ? null : faculdade);
+	}
+	
+	public void setFaculdade(Faculdade faculdade) {
+		this.faculdade = faculdade;
+		if (faculdade == null || curso == null)
+			setCurso(null);
+		else
+			setCurso(curso.getFaculdade() == faculdade ? curso : null);
+	}
+	
+	public Curso getCurso() {
+		return curso;
+	}
+	
+	public void setCurso(Curso curso) {
+		this.curso = curso;
+		if (curso == null || model.getDisciplina() == null)
+			model.setDisciplina(null);
+		else
+			model.setDisciplina(model.getDisciplina().getCurso() == curso ? model.getDisciplina() : null);
+	}
+	
+	public Pergunta getPergunta() {
+		return pergunta;
+	}
+	
+	public void setPergunta(Pergunta pergunta) {
+		this.pergunta = pergunta;
+	}
+	
+	public List<Professor> getProfessores() {
+		return professorService.getList();
 	}
 	
 	public List<Faculdade> getFaculdades() {
-		return faculdadeService.getList();
+		return professor == null ? null : faculdadeService.getFaculdadesPorProfessor(professor);
 	}
+
+	public List<Curso> getCursos() {
+		return faculdade != null ? faculdade.getCursos() : null;
+	}
+
+	public List<Disciplina> getDisciplinas() {
+		return faculdade == null ? null : disciplinaService.getDisciplinasPorFaculdade(faculdade);
+	}
+	
+	public List<Turma> getTurmas() {
+		return model.getDisciplina() == null ? null : turmaService.getTurmaPorDisciplina(model.getDisciplina());
+	}
+	
+	
 	
 	public List<Pergunta> getPerguntas() {
 		return model.getDisciplina() == null ? null : perguntaService.getPerguntasPorDisciplina(model.getDisciplina());
@@ -56,19 +123,13 @@ public class ProvaManagedBean extends sistema.beans.ManagedBean<Prova> {
 	public void addPergunta(Pergunta pergunta) {
 		pergunta.setOrdem(model.getPerguntas().size() + 1);
 		model.getPerguntas().add(pergunta);
+		pergunta = new Pergunta();
 	}
 	
 	public void removePergunta(Pergunta pergunta) {
 		model.getPerguntas().remove(pergunta);
+		pergunta = new Pergunta();
 	}
-	
-//	public List<Pergunta> getPerguntasSalvar() {
-//		return perguntasSalvar;
-//	}
-//	
-//	public void addPerguntasSalvar(Pergunta pergunta) {
-//		this.perguntasSalvar.add(pergunta);
-//	}
 	/*
 	 * private Prova prova = new Prova();
 	 * 

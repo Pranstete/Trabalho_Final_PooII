@@ -83,7 +83,7 @@ public class Service<T> {
 		message("Finding...");
 		message(model);
 		try {
-			model = (T) em.find(model.getClass(), emf.getPersistenceUnitUtil().getIdentifier(model));
+			model = (T) em.find(getModelClass(), emf.getPersistenceUnitUtil().getIdentifier(model));
 			message(model == null ? "Not found." : "Found successfully: " + model);
 			message(model);
 		} catch (Exception e) {
@@ -98,6 +98,24 @@ public class Service<T> {
 
 	public T find(T model) {
 		return find(model, null);
+	}
+	
+	public T find(String id) {
+		EntityManager em = emf.createEntityManager();
+		message("Finding...");
+		message(getGenericName() + ": id = " + id);
+		T model = null;
+		try {
+			model = (T) em.find(getModelClass(), id);
+			message(model == null ? "Not found." : "Found successfully: " + model);
+			message(model);
+		} catch (Exception e) {
+			message("Failed to find.");
+			message(e.getMessage());
+		} finally {
+			em.close();
+		}
+		return model;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,6 +137,9 @@ public class Service<T> {
 			query.setParameter(parameter.getKey(), parameter.getValue());
 		}
 		list = query.getResultList();
+		for(T model : list) {
+			message(model);
+		}
 		em.close();
 		return list;
 	}
@@ -131,8 +152,12 @@ public class Service<T> {
 		return getList(String.format("Select f From %s f", getGenericName()));
 	}
 
-	@SuppressWarnings("unchecked")
 	protected String getGenericName() {
-		return ((Class<T>)((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getSimpleName();
+		return getModelClass().getSimpleName();
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Class<T> getModelClass() {
+		return (Class<T>)((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 }
