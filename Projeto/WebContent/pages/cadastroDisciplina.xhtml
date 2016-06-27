@@ -18,10 +18,10 @@
 		<h:form>
 			<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroDisciplina.nome']}" />
-				<p:inputText value="#{disciplinaManagedBean.disciplina.nome}" />
+				<p:inputText value="#{disciplinaManagedBean.disciplina.nome}" required="true" />
 				
 				<p:outputLabel value="#{msg['pages.cadastroDisciplina.curso']}" />
-				<p:selectOneMenu value="#{disciplinaManagedBean.disciplina.curso}" converter="cursoConverter">
+				<p:selectOneMenu value="#{disciplinaManagedBean.disciplina.curso}" converter="cursoConverter" required="true">
 					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroDisciplina.curso.msg']}" />
 					<f:selectItems value="#{disciplinaManagedBean.cursos}" var="curso"
 						itemValue="#{curso}" itemLabel="#{curso.faculdade.nome} - #{curso.nome}" />
@@ -52,7 +52,7 @@
 							<p:outputLabel value="#{model.nome}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{model.nome}" style="width:100%" />
+							<p:inputText value="#{model.nome}" style="width:100%" required="true" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -63,7 +63,7 @@
 							<p:outputLabel value="#{model.curso.nome}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:selectOneMenu value="#{model.curso}" converter="cursoConverter">
+							<p:selectOneMenu value="#{model.curso}" converter="cursoConverter" required="true">
 								<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroDisciplina.curso.msg']}" />
 								<f:selectItems value="#{disciplinaManagedBean.cursos}" var="curso"
 									itemValue="#{curso}" itemLabel="#{curso.nome}" />

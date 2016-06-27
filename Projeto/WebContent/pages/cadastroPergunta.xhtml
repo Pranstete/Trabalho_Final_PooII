@@ -19,47 +19,40 @@
 		<h:form>
 			<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroPergunta.disciplina']}" />
-				<p:selectOneMenu value="#{perguntaManagedBean.disciplina}"
-					converter="disciplinaConverter">
-					<f:selectItem itemValue=""
-						itemLabel="#{msg['pages.cadastroPergunta.disciplina.msg']}" />
+				<p:selectOneMenu value="#{perguntaManagedBean.disciplina}" converter="disciplinaConverter">
+					<p:ajax update="conteudo" />
+					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroPergunta.disciplina.msg']}" />
 					<f:selectItems value="#{perguntaManagedBean.disciplinas}"
-						var="disciplina" itemValue="#{disciplina}"
-						itemLabel="#{disciplina.nome}" />
+						var="disciplina" itemValue="#{disciplina}" itemLabel="#{disciplina.nome}" />
 				</p:selectOneMenu>
 
 				<p:outputLabel value="#{msg['pages.cadastroPergunta.conteudo']}" />
-				<p:selectOneMenu value="#{perguntaManagedBean.pergunta.conteudo}"
-					converter="conteudoConverter">
-					<f:selectItem itemValue=""
-						itemLabel="#{msg['pages.cadastroPergunta.conteudo.msg']}" />
-					<f:selectItems value="#{perguntaManagedBean.conteudos}"
-						var="conteudo" itemValue="#{conteudo}"
-						itemLabel="#{conteudo.descricao}" />
+				<p:selectOneMenu id="conteudo" value="#{perguntaManagedBean.pergunta.conteudo}" converter="conteudoConverter">
+					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroPergunta.conteudo.msg']}" />
+					<f:selectItems value="#{perguntaManagedBean.conteudos}" 
+						var="conteudo" itemValue="#{conteudo}" itemLabel="#{conteudo.descricao}" />
 				</p:selectOneMenu>
 
 				<p:outputLabel value="#{msg['pages.cadastroPergunta.perg']}" />
-				<p:inputTextarea cols="40" rows="5"
-					value="#{perguntaManagedBean.pergunta.texto}" width="200"
-					required="true" />
+				<p:inputTextarea cols="40" rows="5" value="#{perguntaManagedBean.pergunta.texto}" width="200" required="true" />
 
 				<p:outputLabel value="#{msg['pages.cadastroPergunta.tipo']}" />
-				<p:selectOneMenu value="#{perguntaManagedBean.tipoPergunta}"
-					required="true">
-					<f:selectItem itemValue=""
-						itemLabel="#{msg['pages.cadastroPergunta.tipoPergunta.msg']}" />
+				<p:selectOneMenu value="#{perguntaManagedBean.pergunta.tipo}" required="true">
+					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroPergunta.tipoPergunta.msg']}" />
 					<f:selectItems value="#{perguntaManagedBean.tiposPergunta}"
 						var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="#{msg['pages.cadastroPergunta.ref']}" />
+				<p:selectOneMenu value="#{perguntaManagedBean.parentPergunta}">
+					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroPergunta.pergunta.msg']}" />
+					<f:selectItems value="#{perguntaManagedBean.perguntas}"
+						var="pergunta" itemValue="#{pergunta}" itemLabel="#{pergunta.texto}" />
 				</p:selectOneMenu>
 			</p:panelGrid>
 			<p:commandButton value="#{msg['pages.comuns.form.btnSalvar']}"
 				action="#{perguntaManagedBean.save}" update="@form, :formTable" />
-
-
 		</h:form>
-
-
-
 		<h3>
 			<p:outputLabel value="#{msg['pages.cadastroPergunta.tableTitle']}" />
 		</h3>
@@ -70,16 +63,13 @@
 				rowsPerPageTemplate="5,10,15"
 				emptyMessage="#{msg['pages.cadastroPergunta.filterMSG']}">
 
-				<p:ajax event="rowEdit" listener="#{perguntaManagedBean.onRowEdit}"
-					update="@this" />
+				<p:ajax event="rowEdit" listener="#{perguntaManagedBean.onRowEdit}" update="@this" />
 
-				<p:column headerText="#{msg['pages.cadastroPergunta.codigo']}"
-					filterBy="#{model.codigo}">
+				<p:column headerText="#{msg['pages.cadastroPergunta.codigo']}" filterBy="#{model.codigo}">
 					<p:outputLabel value="#{model.codigo}" />
 				</p:column>
 
-				<p:column headerText="#{msg['pages.cadastroPergunta.perg']}"
-					filterBy="#{model.texto}">
+				<p:column headerText="#{msg['pages.cadastroPergunta.perg']}" filterBy="#{model.texto}">
 					<p:cellEditor>
 						<f:facet name="output">
 							<p:outputLabel value="#{model.texto}" />
@@ -90,13 +80,10 @@
 					</p:cellEditor>
 				</p:column>
 
-				<p:column style="width:70px"
-					headerText="#{msg['pages.cadastroPergunta.optionTable']}">
+				<p:column style="width:70px" headerText="#{msg['pages.cadastroPergunta.optionTable']}">
 					<p:rowEditor />
-					<p:commandLink styleClass="ui-icon ui-icon-trash"
-						style="text-align:center"
-						actionListener="#{perguntaManagedBean.delete(model)}"
-						update="@form" />
+					<p:commandLink styleClass="ui-icon ui-icon-trash" style="text-align:center"
+						actionListener="#{perguntaManagedBean.delete(model)}" update="@form" />
 				</p:column>
 			</p:dataTable>
 		</h:form>

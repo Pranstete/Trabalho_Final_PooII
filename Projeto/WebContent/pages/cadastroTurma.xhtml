@@ -18,14 +18,14 @@
 		<h:form>
 			<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroTurma.professor']}" />
-				<p:selectOneMenu value="#{turmaManagedBean.turma.professor}" converter="professorConverter">
+				<p:selectOneMenu value="#{turmaManagedBean.turma.professor}" converter="professorConverter" required="true">
 					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroTurma.professor.msg']}" />
 					<f:selectItems value="#{turmaManagedBean.professores}" var="professor"
 						itemValue="#{professor}" itemLabel="#{professor.nome}" />
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="#{msg['pages.cadastroTurma.faculdade']}" />
-				<p:selectOneMenu id="faculdade" value="#{turmaManagedBean.faculdade}" converter="faculdadeConverter" >
+				<p:selectOneMenu id="faculdade" value="#{turmaManagedBean.faculdade}" converter="faculdadeConverter" required="true">
 					<p:ajax update="curso, disciplina" />
 					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroTurma.faculdade.msg']}" />
 					<f:selectItems value="#{turmaManagedBean.faculdades}" var="faculdade"
@@ -33,7 +33,7 @@
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="#{msg['pages.cadastroTurma.curso']}" />
-				<p:selectOneMenu id="curso" value="#{turmaManagedBean.curso}" converter="cursoConverter">
+				<p:selectOneMenu id="curso" value="#{turmaManagedBean.curso}" converter="cursoConverter" required="true">
 					<p:ajax update="disciplina" />
 					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroTurma.curso.msg']}" />
 					<f:selectItems value="#{turmaManagedBean.cursos}" var="curso"
@@ -41,14 +41,14 @@
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="#{msg['pages.cadastroTurma.disciplina']}" />
-				<p:selectOneMenu id="disciplina" value="#{turmaManagedBean.turma.disciplina}" converter="disciplinaConverter">
+				<p:selectOneMenu id="disciplina" value="#{turmaManagedBean.turma.disciplina}" converter="disciplinaConverter" required="true">
 					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroTurma.disciplina.msg']}" />
 					<f:selectItems value="#{turmaManagedBean.disciplinas}" var="disciplina"
 						itemValue="#{disciplina}" itemLabel="#{disciplina.nome}" />
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="#{msg['pages.cadastroTurma.nome']}" />
-				<p:inputText value="#{turmaManagedBean.turma.nome}" />
+				<p:inputText value="#{turmaManagedBean.turma.nome}"  required="true"/>
 			</p:panelGrid>
 			<p:commandButton value="#{msg['pages.comuns.form.btnSalvar']}"
 				action="#{turmaManagedBean.save}" update="@form, :formTable" />
@@ -75,7 +75,7 @@
 							<p:outputLabel value="#{model.nome}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{model.nome}" style="width:100%" />
+							<p:inputText value="#{model.nome}" style="width:100%" required="true" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -90,7 +90,7 @@
 							<p:outputLabel value="#{model.disciplina.curso.nome}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:selectOneMenu value="#{model.disciplina.curso}" converter="cursoConverter">
+							<p:selectOneMenu value="#{model.disciplina.curso}" converter="cursoConverter" required="true">
 								<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroTurma.curso.msg']}" />
 								<f:selectItems value="#{turmaManagedBean.cursos}" var="curso"
 									itemValue="#{curso}" itemLabel="#{curso.nome}" />

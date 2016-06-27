@@ -18,7 +18,7 @@
 		<h:form>
 			<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroFaculdade.nome']}" />
-				<p:inputText value="#{faculdadeManagedBean.faculdade.nome}" />
+				<p:inputText value="#{faculdadeManagedBean.faculdade.nome}" required="true" />
 			</p:panelGrid>
 			<p:commandButton value="#{msg['pages.comuns.form.btnSalvar']}"
 				action="#{faculdadeManagedBean.save}" update="@form, :formTable" />
@@ -45,7 +45,7 @@
 							<p:outputLabel value="#{model.nome}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{model.nome}" style="width:100%" />
+							<p:inputText value="#{model.nome}" style="width:100%" required="true" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>

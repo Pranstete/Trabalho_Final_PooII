@@ -33,7 +33,7 @@ public class Service<T> {
 			em.getTransaction().begin();
 			em.persist(model);
 			em.getTransaction().commit();
-			message("Saved successfully.");
+			message("Saved successfully: " + model);
 		} catch (Exception e) {
 			message("Failed to save.");
 			message(e.getMessage());
@@ -50,7 +50,7 @@ public class Service<T> {
 			em.getTransaction().begin();
 			em.merge(model);
 			em.getTransaction().commit();
-			message("Updated successfully.");
+			message("Updated successfully: " + model);
 		} catch (Exception e) {
 			message("Failed to update.");
 			message(e.getMessage());
@@ -67,7 +67,7 @@ public class Service<T> {
 			em.getTransaction().begin();
 			em.remove(find(model, em));
 			em.getTransaction().commit();
-			message("Deleted successfully.");
+			message("Deleted successfully: " + model);
 		} catch (Exception e) {
 			message("Failed to delete.");
 			message(e.getMessage());
@@ -84,7 +84,7 @@ public class Service<T> {
 		message(model);
 		try {
 			model = (T) em.find(model.getClass(), emf.getPersistenceUnitUtil().getIdentifier(model));
-			message(model == null ? "Not found." : "Found successfully.");
+			message(model == null ? "Not found." : "Found successfully: " + model);
 			message(model);
 		} catch (Exception e) {
 			message("Failed to find.");

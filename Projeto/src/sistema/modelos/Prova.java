@@ -1,7 +1,9 @@
 package sistema.modelos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -35,6 +38,9 @@ public class Prova implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "cod_disciplina", nullable = false)
 	private Disciplina disciplina;
+	
+	@OneToMany
+	private List<Pergunta> perguntas = new ArrayList<Pergunta>();
 	
 	public long getCodigo() {
 		return codigo;
@@ -74,6 +80,14 @@ public class Prova implements Serializable {
 
 	public void setDisciplina(Disciplina disciplina) {
 		this.disciplina = disciplina;
+	}
+	
+	public List<Pergunta> getPerguntas() {
+		return perguntas;
+	}
+
+	public void setPerguntas(List<Pergunta> perguntas) {
+		this.perguntas = perguntas;
 	}
 
 	@Override

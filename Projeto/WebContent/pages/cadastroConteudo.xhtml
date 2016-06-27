@@ -18,10 +18,10 @@
 		<h:form>
 			<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroConteudo.descricao']}" />
-				<p:inputText value="#{conteudoManagedBean.conteudo.descricao}" />
+				<p:inputText value="#{conteudoManagedBean.conteudo.descricao}" required="true" />
 
 				<p:outputLabel value="#{msg['pages.cadastroConteudo.disciplina.nome']}" />
-				<p:selectOneMenu value="#{conteudoManagedBean.conteudo.disciplina}" converter="disciplinaConverter">
+				<p:selectOneMenu value="#{conteudoManagedBean.conteudo.disciplina}" converter="disciplinaConverter" required="true">
 					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroConteudo.disciplina.msg']}" />
 					<f:selectItems value="#{conteudoManagedBean.disciplinas}" var="disciplina"
 						itemValue="#{disciplina}" itemLabel="#{disciplina.nome}" />
@@ -52,7 +52,7 @@
 							<p:outputLabel value="#{model.descricao}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{model.descricao}" style="width:100%" />
+							<p:inputText value="#{model.descricao}" style="width:100%" required="true" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -63,7 +63,7 @@
 							<p:outputLabel value="#{model.disciplina.nome}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:selectOneMenu value="#{model.disciplina}" converter="disciplinaConverter" style="width:100%">
+							<p:selectOneMenu value="#{model.disciplina}" converter="disciplinaConverter" style="width:100%" required="true">
 								<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroConteudo.disciplina.msg']}" />
 								<f:selectItems value="#{conteudoManagedBean.disciplinas}"
 									var="disciplina" itemValue="#{disciplina}" itemLabel="#{disciplina.nome}" />

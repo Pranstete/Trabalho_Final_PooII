@@ -7,12 +7,10 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.TreeNode;
 
-import sistema.modelos.Alternativa;
 import sistema.modelos.Conteudo;
 import sistema.modelos.Disciplina;
 import sistema.modelos.Pergunta;
 import sistema.modelos.TipoPergunta;
-import sistema.service.ConteudoService;
 import sistema.service.DisciplinaService;
 import sistema.service.PerguntaService;
 
@@ -21,8 +19,8 @@ import sistema.service.PerguntaService;
 public class PerguntaManagedBean extends sistema.beans.ManagedBean<Pergunta> {
 
 	private DisciplinaService disciplinaService = new DisciplinaService();
-	private TipoPergunta tipoPergunta;
 	private Disciplina disciplina;
+	private Pergunta parentPergunta;
 //	private Alternativa alternativa = new Alternativa();
 	private TreeNode t; 
 	public PerguntaManagedBean() {
@@ -44,13 +42,6 @@ public class PerguntaManagedBean extends sistema.beans.ManagedBean<Pergunta> {
 	public void setDisciplina(Disciplina disciplina) {
 		this.disciplina = disciplina;
 	}
-//	public Alternativa getAlternativa() {
-//		return alternativa;
-//	}
-//	
-//	public void setAlternativa(Alternativa alternativa) {
-//		this.alternativa = alternativa;
-//	}
 	
 	public List<Pergunta> getPerguntas() {
 		return getList();
@@ -68,30 +59,32 @@ public class PerguntaManagedBean extends sistema.beans.ManagedBean<Pergunta> {
 		return TipoPergunta.values();
 	}
 	
-	public TipoPergunta getTipoPergunta() {
-		return tipoPergunta;
-	}
-	
-	public void setTipoPergunta(TipoPergunta tipoPergunta) {
-		this.tipoPergunta = tipoPergunta;
-	}
 	
 	public Boolean isAlternativa() {
-		return tipoPergunta == TipoPergunta.ALTERNATIVA;
+		return model.getTipo() == TipoPergunta.ALTERNATIVA;
 	}
 	
 	public Boolean isDissertativa() {
-		return tipoPergunta == TipoPergunta.DISSERTATIVA;
+		return model.getTipo() == TipoPergunta.DISSERTATIVA;
 	}
 	
 	public Boolean isBooleana() {
-		return tipoPergunta == TipoPergunta.BOOLEANA;
+		return model.getTipo() == TipoPergunta.BOOLEANA;
 	}
-	
+	public Pergunta getParentPergunta() {
+		return parentPergunta;
+	}
+	public void setParentPergunta(Pergunta parentPergunta) {
+		this.parentPergunta = parentPergunta;
+	}
 	@Override
 	public void save() {
-		
+		if (parentPergunta != null) {
+			model.setParentPergunta(parentPergunta);
+		}
 		super.save();
+		parentPergunta = null;
+		disciplina = null;
 	}
 /*
 	

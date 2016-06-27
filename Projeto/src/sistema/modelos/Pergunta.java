@@ -36,9 +36,11 @@ public class Pergunta implements Serializable {
 	@JoinColumn(name = "cod_conteudo", nullable = false)
 	private Conteudo conteudo;
 
-	@OneToMany
-	@JoinColumn(name="subPergunta")
-	private List<Pergunta> subPerguntas;
+	@ManyToOne
+	@JoinColumn(name="ParentPergunta")
+	private Pergunta parentPergunta;
+	
+	private int ordem;
 
 	// @OneToMany(cascade = CascadeType.ALL, mappedBy = "pergunta")
 	// private List<Alternativa> alternativas = new ArrayList<Alternativa>();
@@ -74,7 +76,6 @@ public class Pergunta implements Serializable {
 	public void setConteudo(Conteudo conteudo) {
 		this.conteudo = conteudo;
 	}
-
 	// public List<Alternativa> getAlternativas() {
 	// return alternativas;
 	// }
@@ -110,11 +111,19 @@ public class Pergunta implements Serializable {
 		return "Pergunta [codigo=" + codigo + ", texto=" + texto + ", tipo=" + tipo + ", conteudo=" + conteudo + "]";
 	}
 
-	public List<Pergunta> getSubPerguntas() {
-		return subPerguntas;
+	public Pergunta getParentPergunta() {
+		return parentPergunta;
 	}
 
-	public void setSubPerguntas(List<Pergunta> subPerguntas) {
-		this.subPerguntas = subPerguntas;
+	public void setParentPergunta(Pergunta parentPergunta) {
+		this.parentPergunta = parentPergunta;
+	}
+
+	public int getOrdem() {
+		return ordem;
+	}
+
+	public void setOrdem(int ordem) {
+		this.ordem = ordem;
 	}
 }

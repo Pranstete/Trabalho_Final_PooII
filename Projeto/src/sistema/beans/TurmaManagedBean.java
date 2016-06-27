@@ -71,7 +71,7 @@ public class TurmaManagedBean extends sistema.beans.ManagedBean<Turma> {
 	public List<Disciplina> getDisciplinas() {
 		return curso == null ? null : disciplinaService.getDisciplinasPorCurso(curso);
 	}
-
+	
 	@Override
 	public void save() {
 		this.model.getDisciplina().setCurso(curso);

@@ -1,4 +1,3 @@
-
 <ui:composition template="templateMenu.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -13,45 +12,39 @@
 	</ui:define>
 
 	<ui:define name="principal">
-
 		<h1>
 			<p:outputLabel value="#{msg['pages.cadastroProva.menu']}" />
 		</h1>
-
-		<h:form id="formProva">
+		<h:form>
 			<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroProva.data']}" />
-				<p:calendar id="dataProva"
-					value="#{provaManagedBean.prova.dataProva}" pattern="dd/MM/yyyy"
+				<p:calendar id="dataProva" value="#{provaManagedBean.prova.dataProva}" pattern="dd/MM/yyyy"
 					showOn="button"></p:calendar>
 
 				<p:outputLabel value="#{msg['pages.cadastroProva.faculdade']}" />
-				<p:selectOneMenu value="provaManagedBean.prova.faculdade"
-					style="width:150px;">
+				<p:selectOneMenu value="provaManagedBean.prova.faculdade" style="width:150px;">
+					<p:ajax update="disciplina, turma"></p:ajax>
 					<f:selectItem noSelectionOption="true"></f:selectItem>
 					<f:selectItems value="#{provaManagedBean.faculdades}"
 						var="faculdade" itemLabel="#{faculdade.nome}"></f:selectItems>
 				</p:selectOneMenu>
 
-				<p:outputLabel value="#{msg['pages.cadastroProva.turma']}" />
-				<p:selectOneMenu value="provaManagedBean.prova.turma"
-					style="width:150px;">
+				<p:outputLabel value="#{msg['pages.cadastroProva.disciplina']}" />
+				<p:selectOneMenu id="disciplina" value="provaManagedBean.prova.disciplina" style="width:150px;">
+					<p:ajax update="turma"></p:ajax>
 					<f:selectItem noSelectionOption="true"></f:selectItem>
-					<f:selectItems value="#{provaManagedBean.turmas}" var="turma"
-						itemLabel="#{turma.nome}"></f:selectItems>
+					<f:selectItems value="#{provaManagedBean.disciplinas}" var="disciplina" itemLabel="#{disciplina.nome}"></f:selectItems>
 				</p:selectOneMenu>
 
-				<p:outputLabel value="#{msg['pages.cadastroProva.disciplina']}" />
-				<p:selectOneMenu value="provaManagedBean.prova.disciplina"
-					style="width:150px;">
+				<p:outputLabel value="#{msg['pages.cadastroProva.turma']}" />
+				<p:selectOneMenu id="turma" value="provaManagedBean.prova.turma" style="width:150px;">
 					<f:selectItem noSelectionOption="true"></f:selectItem>
-					<f:selectItems value="#{provaManagedBean.disciplinas}"
-						var="disciplina" itemLabel="#{disciplina.nome}"></f:selectItems>
+					<f:selectItems value="#{provaManagedBean.turmas}" var="turma" itemLabel="#{turma.nome}"></f:selectItems>
 				</p:selectOneMenu>
 			</p:panelGrid>
 			
-			<p:spacer height="10"></p:spacer>
 			
+			<p:spacer height="10"></p:spacer>
 			<p:fieldset legend="#{msg['pages.cadastroProva.perguntas']}">
 				<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroProva.disciplina']}" />
