@@ -18,19 +18,19 @@
 		<h:form>
 			<p:panelGrid columns="2">
 				<p:outputLabel value="#{msg['pages.cadastroProva.data']}" />
-				<p:calendar id="dataProva" value="#{prova.dataProva}" pattern="dd/MM/yyyy" showOn="button"></p:calendar>
+				<p:calendar id="dataProva" value="#{provaManagedBean.prova.dataProva}" pattern="dd/MM/yyyy" showOn="button"></p:calendar>
 
-<p:outputLabel value="#{msg['pages.cadastroProva.professor']}" />
+				<p:outputLabel value="#{msg['pages.cadastroProva.professor']}" />
 				<p:selectOneMenu value="#{provaManagedBean.professor}" converter="professorConverter" >
-					<p:ajax update="faculdade, curso, disciplina, turma" />
+					<p:ajax update="faculdade, curso, disciplina, turma, pergunta" />
 					<f:selectItem itemValue="#{null}" itemLabel="#{msg['pages.cadastroProva.professor.msg']}" />
 					<f:selectItems value="#{provaManagedBean.professores}" var="professor"
 						itemValue="#{professor}" itemLabel="#{professor.nome}" />
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="#{msg['pages.cadastroProva.faculdade']}" />
-				<p:selectOneMenu id="faculdade" value="#{provaManagedBean.faculdade}" converter="faculdadeConverter">
-					<p:ajax update="curso, disciplina, turma" />
+				<p:selectOneMenu id="faculdade" value="#{provaManagedBean.prova.faculdade}" converter="faculdadeConverter">
+					<p:ajax update="curso, disciplina, turma, pergunta" />
 					<f:selectItem itemValue="#{null}" itemLabel="#{msg['pages.cadastroProva.faculdade.msg']}" />
 					<f:selectItems value="#{provaManagedBean.faculdades}" var="faculdade"
 						itemValue="#{faculdade}" itemLabel="#{faculdade.nome}" />
@@ -38,7 +38,7 @@
 				
 				<p:outputLabel value="#{msg['pages.cadastroProva.curso']}" />
 				<p:selectOneMenu id="curso" value="#{provaManagedBean.curso}" converter="cursoConverter">
-					<p:ajax update="disciplina, turma" />
+					<p:ajax update="disciplina, turma, pergunta" />
 					<f:selectItem itemValue="#{null}" itemLabel="#{msg['pages.cadastroProva.curso.msg']}" />
 					<f:selectItems value="#{provaManagedBean.cursos}" var="curso"
 						itemValue="#{curso}" itemLabel="#{curso.nome}" />
@@ -46,7 +46,7 @@
 				
 				<p:outputLabel value="#{msg['pages.cadastroProva.disciplina']}" />
 				<p:selectOneMenu id="disciplina" value="#{provaManagedBean.prova.disciplina}" converter="disciplinaConverter">
-					<p:ajax update="turma" />
+					<p:ajax update="turma, pergunta" />
 					<f:selectItem itemValue="#{null}" itemLabel="#{msg['pages.cadastroProva.disciplina.msg']}" />
 					<f:selectItems value="#{provaManagedBean.disciplinas}" var="disciplina"
 						itemValue="#{disciplina}" itemLabel="#{disciplina.nome}" />
@@ -66,22 +66,96 @@
 			<p:spacer height="10"></p:spacer>
 			<p:fieldset legend="#{msg['pages.cadastroProva.perguntas']}">
 				<p:panelGrid columns="2">
-				<p:outputLabel value="#{msg['pages.cadastroProva.disciplina']}" />
+				<p:outputLabel value="#{msg['pages.cadastroProva.ordem']}" />
 				<p:outputLabel value="#{msg['pages.cadastroProva.pergunta.escolha']}" />
 				
-				<p:selectOneMenu value="#{provaManagedBean.pergunta}" style="width:150px;">
+				<p:inputText value="#{provaManagedBean.ordem}" type="number"></p:inputText>
+				
+				<p:selectOneMenu id="pergunta" value="#{provaManagedBean.pergunta}" style="width:150px;" converter="perguntaConverter">
 					<f:selectItem noSelectionOption="true"></f:selectItem>
-					<f:selectItems value="#{provaManagedBean.perguntas}" var="pergunta" itemLabel="#{pergunta.nome}"></f:selectItems>
+					<f:selectItems value="#{provaManagedBean.perguntas}" var="pergunta" itemLabel="#{pergunta.texto}"></f:selectItems>
 				</p:selectOneMenu> 
 				
-				<p:selectOneMenu value="#{provaManagedBean.pergunta}" style="width:150px;">
-					<f:selectItem noSelectionOption="true"></f:selectItem>
-					<f:selectItems value="#{provaManagedBean.perguntas}" var="pergunta" itemLabel="#{pergunta.nome}"></f:selectItems>
-				</p:selectOneMenu> 
 				
 				</p:panelGrid>
+				<p:commandButton value="Adicionar na prova" action="#{provaManagedBean.addPergunta}" update="@form" />
+					<p:dataTable value="#{provaManagedBean.prova.perguntas}" var="model" editable="true"
+						emptyMessage="#{msg['pages.cadastroPergunta.filterMSG']}">
+						<p:ajax event="rowEdit" listener="#{provaManagedBean.onRowPerguntaEdit}" update="@this" />
+						<p:column headerText="Ordem" filterBy="#{model.ordem}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<p:outputLabel value="#{model.ordem}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{model.ordem}" style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Pergunta" filterBy="#{model.texto}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<p:outputLabel value="#{model.texto}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{model.texto}" style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="width:70px"
+							headerText="#{msg['pages.cadastroPergunta.optionTable']}">
+							<p:rowEditor />
+							<p:commandLink styleClass="ui-icon ui-icon-trash" style="text-align:center" 
+								actionListener="#{provaManagedBean.removePergunta(model)}" update="@form" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+				<p:commandButton value="Salvar prova" action="#{provaManagedBean.save}" update="@form" />
+				
+				<p:spacer height="20"/>
+				<p:fieldset legend="LISTA DE PROVAS">
+					<p:dataTable value="#{provaManagedBean.provas}" var="model"
+						editable="true" paginator="true" rows="5" selection="#{provaManagedBean.prova}" rowKey="#{model.codigo}" selectionMode="single"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15"
+						emptyMessage="#{msg['pages.cadastroPergunta.filterMSG']}">
+	
+					<p:ajax event="rowEdit" listener="#{provaManagedBean.onRowEdit}" update="@this" />
+					<p:ajax event="rowSelect" listener="#{provaManagedBean.onRowSelect}" update="@form" />
+	        		<p:ajax event="rowUnselect" listener="#{provaManagedBean.onRowUnselect}" update="@form" />
+					
+					<p:column headerText="#{msg['pages.cadastroProva.codigo']}" filterBy="#{model.codigo}">
+						<p:outputLabel value="#{model.codigo}" />
+					</p:column>
+	
+					<p:column headerText="#{msg['pages.cadastroProva.data']}"
+						filterBy="#{model.data}">
+		
+						<p:outputLabel value="#{model.dataProva}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</p:outputLabel>
+					</p:column>
+	
+					<p:column headerText="#{msg['pages.cadastroProva.professor']}" filterBy="#{model.turma.professor.nome}">
+					<p:outputLabel value="#{model.turma.professor.nome}" />
+					</p:column>
+					
+					<p:column headerText="#{msg['pages.cadastroProva.disciplina']}" filterBy="#{model.disciplina.nome}">
+						<p:outputLabel value="#{model.disciplina.nome}" />
+					</p:column>
+	
+					<p:column headerText="#{msg['pages.cadastroProva.turma']}" filterBy="#{model.turma.nome}">
+						<p:outputLabel value="#{model.turma.nome}" />
+					</p:column>
+	
+					<p:column style="width:70px" headerText="#{msg['pages.cadastroPergunta.optionTable']}">
+						<p:commandLink styleClass="ui-icon ui-icon-trash" style="text-align:center"
+							actionListener="#{provaManagedBean.delete(model)}" update="@form" />
+						<p:commandButton styleClass="ui-icon ui-icon-arrowthickstop-1-s" style="text-align:center"
+							actionListener="#{provaManagedBean.gerar}" />
+					</p:column>					
+				</p:dataTable>
 			</p:fieldset>
-			
 		</h:form>
 	</ui:define>
 </ui:composition>

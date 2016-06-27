@@ -44,7 +44,7 @@
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="#{msg['pages.cadastroPergunta.ref']}" />
-				<p:selectOneMenu value="#{perguntaManagedBean.parentPergunta}">
+				<p:selectOneMenu value="#{perguntaManagedBean.parentPergunta}" converter="perguntaConverter">
 					<f:selectItem itemValue="" itemLabel="#{msg['pages.cadastroPergunta.pergunta.msg']}" />
 					<f:selectItems value="#{perguntaManagedBean.perguntas}"
 						var="pergunta" itemValue="#{pergunta}" itemLabel="#{pergunta.texto}" />
@@ -78,6 +78,14 @@
 							<p:inputText value="#{model.texto}" style="width:100%" />
 						</f:facet>
 					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="#{msg['pages.cadastroPergunta.conteudo']}" filterBy="#{model.conteudo.descricao}">
+					<p:outputLabel value="#{model.conteudo.descricao}" />
+				</p:column>
+				
+				<p:column headerText="#{msg['pages.cadastroPergunta.disciplina']}" filterBy="#{model.conteudo.disciplina.nome}">
+					<p:outputLabel value="#{model.conteudo.disciplina.nome}" />
 				</p:column>
 
 				<p:column style="width:70px" headerText="#{msg['pages.cadastroPergunta.optionTable']}">
