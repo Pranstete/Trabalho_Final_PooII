@@ -12,6 +12,11 @@ public class PerguntaService extends Service<Pergunta> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	public List<Pergunta> getList() {
+		return super.getList(String.format("Select f From %s f order by f.ordem", getGenericName()));
+	}
+	
 	public List<Pergunta> getPerguntasPorDisciplina(Disciplina disciplina) {
 		String query = "Select f From Pergunta f where f.conteudo.disciplina.codigo = :codigoDisciplina";
 		Map<String, Object> parameters = new HashMap<String, Object>();

@@ -2,6 +2,8 @@ package sistema.modelos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +90,7 @@ public class Prova implements Serializable {
 
 	public void setPerguntas(List<Pergunta> perguntas) {
 		this.perguntas = perguntas;
+		Collections.sort(this.perguntas);
 	}
 
 	@Override

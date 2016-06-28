@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Pergunta implements Serializable {
+public class Pergunta implements Serializable, Comparable<Pergunta> {
 
 	private static final long serialVersionUID = -4247759259576529210L;
 
@@ -37,9 +37,9 @@ public class Pergunta implements Serializable {
 	private Conteudo conteudo;
 
 	@ManyToOne
-	@JoinColumn(name="ParentPergunta")
+	@JoinColumn(name = "ParentPergunta")
 	private Pergunta parentPergunta;
-	
+
 	private int ordem;
 
 	// @OneToMany(cascade = CascadeType.ALL, mappedBy = "pergunta")
@@ -125,5 +125,15 @@ public class Pergunta implements Serializable {
 
 	public void setOrdem(int ordem) {
 		this.ordem = ordem;
+	}
+
+	public int compareTo(Pergunta pergunta) {
+		if (this.ordem > pergunta.ordem) {
+			return -1;
+		} else if (this.ordem < pergunta.ordem) {
+			return 1;
+		}
+
+		return 0;
 	}
 }

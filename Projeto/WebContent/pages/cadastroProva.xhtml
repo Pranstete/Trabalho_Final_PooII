@@ -79,7 +79,7 @@
 				
 				</p:panelGrid>
 				<p:commandButton value="Adicionar na prova" action="#{provaManagedBean.addPergunta}" update="@form" />
-					<p:dataTable value="#{provaManagedBean.prova.perguntas}" var="model" editable="true"
+					<p:dataTable id="tablePergunta" value="#{provaManagedBean.prova.perguntas}" var="model" editable="true"
 						emptyMessage="#{msg['pages.cadastroPergunta.filterMSG']}">
 						<p:ajax event="rowEdit" listener="#{provaManagedBean.onRowPerguntaEdit}" update="@this" />
 						<p:column headerText="Ordem" filterBy="#{model.ordem}">
@@ -121,8 +121,8 @@
 						emptyMessage="#{msg['pages.cadastroPergunta.filterMSG']}">
 	
 					<p:ajax event="rowEdit" listener="#{provaManagedBean.onRowEdit}" update="@this" />
-					<p:ajax event="rowSelect" listener="#{provaManagedBean.onRowSelect}" update="@form" />
-	        		<p:ajax event="rowUnselect" listener="#{provaManagedBean.onRowUnselect}" update="@form" />
+					<p:ajax event="rowSelect" listener="#{provaManagedBean.onRowSelect}" update="@form, provaPrint" />
+	        		<p:ajax event="rowUnselect" listener="#{provaManagedBean.onRowUnselect}" update="@form, provaPrint" />
 					
 					<p:column headerText="#{msg['pages.cadastroProva.codigo']}" filterBy="#{model.codigo}">
 						<p:outputLabel value="#{model.codigo}" />
@@ -151,11 +151,34 @@
 					<p:column style="width:70px" headerText="#{msg['pages.cadastroPergunta.optionTable']}">
 						<p:commandLink styleClass="ui-icon ui-icon-trash" style="text-align:center"
 							actionListener="#{provaManagedBean.delete(model)}" update="@form" />
-						<p:commandButton styleClass="ui-icon ui-icon-arrowthickstop-1-s" style="text-align:center"
-							actionListener="#{provaManagedBean.gerar}" />
+						<p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px"
+							onstart="#{provaManagedBean.prova = model}">
+						    <p:printer target="provaPrint" />
+						</p:commandButton>
 					</p:column>					
 				</p:dataTable>
 			</p:fieldset>
 		</h:form>
+		<p:spacer height="10000"></p:spacer>
+		<p:outputPanel id="provaPrint">
+			<h1>
+				<p:outputLabel value="AVALIAÇÃO" style="text-align: center"></p:outputLabel>
+			</h1>
+			<h6>
+				<p:outputLabel value="Nome:"></p:outputLabel>
+				<p:outputLabel value="RA:"></p:outputLabel>
+			</h6>
+			<ui2:repeat value="#{provaManagedBean.prova.perguntas}" var="pergunta">
+				<h:panelGrid columns="2" style="width:100%">
+					<p:outputPanel>
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:outputText value="#{pergunta.ordem} - #{pergunta.texto}" style="font-weight: bold" />
+						</h:panelGrid>
+					</p:outputPanel>
+				</h:panelGrid>
+				<hr />
+			</ui2:repeat>
+		</p:outputPanel>
+
 	</ui:define>
 </ui:composition>
