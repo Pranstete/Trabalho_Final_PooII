@@ -65,7 +65,7 @@ public class TurmaManagedBean extends sistema.beans.ManagedBean<Turma> {
 	}
 	
 	public List<Curso> getCursos() {
-		return faculdade == null ? null : faculdade.getCursos();
+		return faculdade != null ? faculdade.getCursos() : null;
 	}
 
 	public List<Disciplina> getDisciplinas() {
